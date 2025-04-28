@@ -2,33 +2,22 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Daftar</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="manifest" href="manifest.json">
-<link rel="icon" href="icons/icon-192x192.png">
-<meta name="theme-color" content="#7c3aed">
+  <title>Daftar - KelasF</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log('Service Worker Registered'));
-  }
-</script>
-<body class="bg-gradient-to-br from-pink-500 to-red-500 h-screen flex items-center justify-center">
-
-  <div class="bg-white/10 backdrop-blur-lg rounded-2xl shadow-xl p-8 w-96">
-    <h2 class="text-white text-2xl font-bold mb-6 text-center">Daftar</h2>
-    <input id="reg-username" type="text" placeholder="Username" class="w-full mb-4 p-3 rounded-lg bg-white/20 text-white placeholder-white/70 focus:outline-none">
-    <input id="reg-email" type="email" placeholder="Email" class="w-full mb-4 p-3 rounded-lg bg-white/20 text-white placeholder-white/70 focus:outline-none">
-    <input id="reg-password" type="password" placeholder="Password" class="w-full mb-6 p-3 rounded-lg bg-white/20 text-white placeholder-white/70 focus:outline-none">
-    <button onclick="register()" class="w-full bg-white/30 hover:bg-white/40 text-white font-bold py-2 rounded-lg transition">Daftar</button>
-    <p class="text-white text-center mt-4">Sudah punya akun? <a href="index.html" class="underline">Login</a></p>
+<body class="glass">
+  <div class="container">
+    <h1>Daftar</h1>
+    <input id="name" type="text" placeholder="Nama">
+    <input id="email" type="email" placeholder="Email">
+    <input id="password" type="password" placeholder="Password">
+    <button onclick="register()">Daftar</button>
+    <p><a href="index.html">Sudah punya akun? Login</a></p>
   </div>
 
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="firebase-config.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
