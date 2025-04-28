@@ -1,0 +1,17 @@
+@import "https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css";
+
+body {
+  @apply min-h-screen flex items-center justify-center bg-blue-100;
+}
+
+.container {
+  @apply bg-white bg-opacity-30 backdrop-blur-md p-10 rounded-lg shadow-lg flex flex-col items-center;
+}
+
+input, button {
+  @apply my-2 p-2 w-64 rounded-md;
+}
+
+button {
+  @apply bg-blue-500 text-white hover:bg-blue-600;
+}
