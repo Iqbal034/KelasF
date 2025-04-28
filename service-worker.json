@@ -1,36 +1,24 @@
-const cacheName = 'loginapp-v1';
-const assets = [
-  '/',
-  '/index.html',
-  '/register.html',
-  '/profile.html',
-  '/app.js',
-  '/manifest.json',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png'
-];
-
-// Install Service Worker
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(cacheName)
-      .then(cache => {
-        return cache.addAll(assets);
-      })
+self.addEventListener('install', e => {
+  e.waitUntil(
+    caches.open('kelasf-cache').then(cache => {
+      return cache.addAll([
+        '/',
+        '/index.html',
+        '/register.html',
+        '/reset.html',
+        '/profile.html',
+        '/style.css',
+        '/app.js',
+        '/firebase-config.js'
+      ]);
+    })
   );
 });
 
-// Activate Service Worker
-self.addEventListener('activate', event => {
-  console.log('Service Worker Activated');
-});
-
-// Fetch assets
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(res => {
-        return res || fetch(event.request);
-      })
+self.addEventListener('fetch', e => {
+  e.respondWith(
+    caches.match(e.request).then(response => {
+      return response || fetch(e.request);
+    })
   );
 });
