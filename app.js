@@ -1,88 +1,86 @@
-// --- Ganti ini dengan Firebase config milikmu ---
-const firebaseConfig = {
-   apiKey: "AIzaSyCt0e0bDAHtZeKc8voyHt64RZhBgQi6-uQ",
-  authDomain: "kelasf-be7e9.firebaseapp.com",
-  projectId: "kelasf-be7e9",
-  storageBucket: "kelasf-be7e9.firebasestorage.app",
-  messagingSenderId: "412551956117",
-  appId: "1:412551956117:web:acdc18b11265314e92fd9c",
-  measurementId: "G-ENS3CQ4685"
-};
-// --------------------------------------------
+// Auth state listener
+auth.onAuthStateChanged(user => {
+  if (user) {
+    // User is signed in
+    const userData = {
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName
+    };
+    console.log('Logged in:', userData);
 
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-// --- Register ---
-async function register() {
-  const username = document.getElementById('reg-username').value.trim();
-  const email = document.getElementById('reg-email').value.trim();
-  const password = document.getElementById('reg-password').value.trim();
-
-  if (!username || !email || !password) {
-    alert('Lengkapi semua data!');
-    return;
-  }
-
-  try {
-    const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-    const user = userCredential.user;
-
-    await db.collection('users').doc(user.uid).set({
-      username: username,
-      email: email
-    });
-
-    alert('Daftar berhasil! Silakan login.');
-    window.location.href = 'index.html';
-  } catch (error) {
-    alert(error.message);
-  }
-}
-
-// --- Login ---
-async function login() {
-  const username = document.getElementById('login-username').value.trim();
-  const password = document.getElementById('login-password').value.trim();
-
-  if (!username || !password) {
-    alert('Isi username dan password!');
-    return;
-  }
-
-  try {
-    // Cari email berdasarkan username
-    const snapshot = await db.collection('users').where('username', '==', username).get();
-
-    if (snapshot.empty) {
-      alert('Username tidak ditemukan!');
-      return;
+    // Example: Redirect if logged in
+    if (window.location.pathname.endsWith('index.html') || window.location.pathname == '/') {
+      window.location.href = "profile.html";
     }
 
-    const userData = snapshot.docs[0].data();
-    const email = userData.email;
+  } else {
+    console.log('No user logged in');
 
-    // Login pakai email
-    await auth.signInWithEmailAndPassword(email, password);
-
-    window.location.href = 'profile.html';
-  } catch (error) {
-    alert(error.message);
-  }
-}
-
-// --- Tampil username di profil ---
-auth.onAuthStateChanged(async user => {
-  if (user && document.getElementById('profile-username')) {
-    const doc = await db.collection('users').doc(user.uid).get();
-    document.getElementById('profile-username').textContent = doc.data().username;
+    if (window.location.pathname.endsWith('profile.html')) {
+      window.location.href = "index.html";
+    }
   }
 });
 
-// --- Logout ---
+// Register
+async function register() {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const name = document.getElementById('name').value;
+
+  try {
+    const result = await auth.createUserWithEmailAndPassword(email, password);
+    await result.user.updateProfile({ displayName: name });
+    alert('Registrasi berhasil! Silahkan login.');
+    window.location.href = "index.html";
+  } catch (error) {
+    alert(error.message);
+  }
+}
+
+// Login
+async function login() {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  try {
+    await auth.signInWithEmailAndPassword(email, password);
+    window.location.href = "profile.html";
+  } catch (error) {
+    alert(error.message);
+  }
+}
+
+// Logout
 function logout() {
   auth.signOut().then(() => {
-    window.location.href = 'index.html';
+    window.location.href = "index.html";
   });
+}
+
+// Reset Password
+function resetPassword() {
+  const email = document.getElementById('email').value;
+  auth.sendPasswordResetEmail(email)
+    .then(() => {
+      alert('Link reset password sudah dikirim ke email kamu.');
+    })
+    .catch(error => {
+      alert(error.message);
+    });
+}
+
+// Update Profile Name
+async function updateProfile() {
+  const name = document.getElementById('displayName').value;
+  const user = auth.currentUser;
+
+  try {
+    await user.updateProfile({ displayName: name });
+    alert('Nama berhasil diupdate!');
+    location.reload();
+  } catch (error) {
+    alert(error.message);
+  }
 }
